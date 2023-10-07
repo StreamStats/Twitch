@@ -41,7 +41,7 @@
         let bannedUsers = [];
 
         // Fetch the banned user list from the given URL
-        fetch('https://polyextended.github.io/lookup/banned.json')
+        fetch('banned.json')
             .then(response => response.json())
             .then(data => {
                 bannedUsers = data.users;
