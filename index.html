@@ -30,6 +30,9 @@
                 You are banned from this channel!
             </div>
         </div>
+        <div id="redirect-section" style="display: none;">
+            <button class="btn btn-primary" id="redirect-button">Redirect to Twitch</button>
+        </div>
     </div>
     <footer>
         &copy; <span id="current-year"></span> Bacon_Space <!-- Update the year here too -->
@@ -62,6 +65,15 @@
 
         // Function to handle the login button click
         document.getElementById("login-button").addEventListener("click", () => {
+            // Get the current page's URL
+            const currentPageUrl = window.location.href;
+            
+            // Redirect the user to Twitch for authentication with the current page's URL as the redirect URI
+            window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(currentPageUrl)}&response_type=token&scope=user:read:follows`;
+        });
+
+        // Function to handle the redirect button click
+        document.getElementById("redirect-button").addEventListener("click", () => {
             // Get the current page's URL
             const currentPageUrl = window.location.href;
             
