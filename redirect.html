@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitch Authentication Redirect</title>
+</head>
+<body>
+    <h1>Redirecting...</h1>
+    <script>
+        // Replace with your Twitch Client ID
+        const clientId = "5i1dxwe52zbj0tra8evwmm4m1b7clz1";
+
+        // Check if the URL contains an access token
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get("access_token");
+
+        if (accessToken) {
+            // Access token is present, save it to localStorage for later use
+            localStorage.setItem("twitch_access_token", accessToken);
+
+            // Redirect back to your main page
+            window.location.href = "https://streamstats.github.io/twitch/"; // Update to your main page URL
+        } else {
+            // No access token found, handle the error or redirect to an error page
+            console.error("No access token found.");
+            // You can redirect to an error page here if needed
+        }
+    </script>
+</body>
+</html>
