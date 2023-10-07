@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamStats</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Twitch Stats</h1>
+        <div id="login-section">
+            <button class="btn btn-primary" id="login-button">Login with Twitch</button>
+        </div>
+        <div id="user-info" style="display: none;">
+            <h2>User Information</h2>
+            <p><strong>Username:</strong> <span id="username"></span></p>
+            <p><strong>Followers:</strong> <span id="followers"></span></p>
+            <!-- You can display more user information here -->
+        </div>
+    </div>
+
+    <!-- Include Bootstrap and Twitch SDK JS scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <script>
+        // Replace with your Twitch Client ID
+        const clientId = "5i1dxwe52zbj0tra8evwmm4m1b7clz1";
+
+        // Initialize the Twitch Embed SDK
+        const options = {
+            width: 300,
+            height: 150,
+            channel: "your_twitch_channel_name", // Replace with the channel you want to embed
+        };
+        new Twitch.Embed("twitch-embed", options);
+
+        // Function to handle the login button click
+        document.getElementById("login-button").addEventListener("click", () => {
+            // Replace with your redirect URL
+            const redirectUrl = "https://streamstats.github.io/twitch";
+            
+            // Redirect the user to Twitch for authentication
+            window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=user:read:follows`;
+        });
+
+        // Function to handle the redirect and fetch user data
+        function handleRedirect() {
+            const urlParams = new URLSearchParams(window.location.hash.substring(1));
+            const accessToken = urlParams.get("access_token");
+
+            if (accessToken) {
+                // Fetch user data using the access token
+                fetch("https://api.twitch.tv/helix/users", {
+                    headers: {
+                        "Client-ID": clientId,
+                        "Authorization": `Bearer ${accessToken}`,
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const user = data.data[0];
+                    document.getElementById("username").textContent = user.display_name;
+                    // You can fetch and display more user data here if needed
+                    document.getElementById("followers").textContent = user.followers_count;
+
+                    // Show the user information section
+                    document.getElementById("user-info").style.display = "block";
+                    document.getElementById("login-section").style.display = "none";
+                })
+                .catch(error => console.error("Error fetching user data:", error));
+            }
+        }
+
+        // Check if the page was loaded after a redirect
+        if (window.location.hash.includes("access_token")) {
+            handleRedirect();
+        }
+    </script>
+</body>
+</html>
