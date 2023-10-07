@@ -10,6 +10,22 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://streamstats.github.io/TwitchStats/css/main.css">
     <script type="text/javascript" src="https://streamstats.github.io/TwitchStats/js/bootstrap.js"></script>
+        <script>
+       // Fetch the PolyExtended user's avatar from GitHub API
+        fetch('https://api.github.com/users/StreamStats')
+            .then(response => response.json())
+            .then(data => {
+                // Extract the avatar URL from the API response
+                const avatarUrl = data.avatar_url;
+                const twitterImage = document.getElementById('twitter-image');
+                twitterImage.content = avatarUrl;
+                // Update the href attribute of the favicon link
+                const favicon = document.getElementById('favicon');
+                favicon.href = avatarUrl;
+            })
+            .catch(error => {
+                console.error('Error fetching avatar:', error);
+            });
 </head>
 <body>
     <div class="container">
@@ -61,10 +77,10 @@
         // Function to handle the login button click
         document.getElementById("login-button").addEventListener("click", () => {
             // Replace with your redirect URL
-            const redirectUrl = window.location.href;
+            const redirectUrl = "https://streamstats.github.io/TwitchStats"; // Update to the correct URL
             
             // Redirect the user to Twitch for authentication
-            window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUrl}&response_type=token&scope=user:read:follows`;
+            window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=token&scope=user:read:follows`;
         });
 
         // Function to handle the redirect and fetch user data
