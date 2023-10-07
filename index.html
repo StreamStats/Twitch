@@ -54,7 +54,7 @@
         let bannedUsers = [];
 
         // Fetch the banned user list from the given URL
-        fetch('banned.json')
+        fetch('https://poly.x10.mx/twitch/banned.json')
             .then(response => response.json())
             .then(data => {
                 bannedUsers = data.users;
