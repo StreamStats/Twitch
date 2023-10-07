@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twitch Authentication Redirect</title>
+    <script type="text/javascript" src="meta.js"></script>
 </head>
 <body>
     <h1>Redirecting...</h1>
@@ -15,16 +16,20 @@
         const urlParams = new URLSearchParams(window.location.search);
         const accessToken = urlParams.get("access_token");
 
-        if (accessToken) {
+        if (!accessToken) {
+            // Access token is not present, initiate the Twitch login
+            const redirectUrl = "https://streamstats.github.io/Twitch/redirect.html"; // Update to your main page URL
+            const twitchAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUrl)}&response_type=token&scope=user:read:follows`;
+            
+            // Redirect to Twitch login
+            window.location.href = twitchAuthUrl;
+        } else {
             // Access token is present, save it to localStorage for later use
             localStorage.setItem("twitch_access_token", accessToken);
 
             // Redirect back to your main page
-            window.location.href = "https://streamstats.github.io/twitch/"; // Update to your main page URL
-        } else {
-            // No access token found, handle the error or redirect to an error page
-            console.error("No access token found.");
-            // You can redirect to an error page here if needed
+            const redirectUrl = "https://streamstats.github.io/Twitch/redirect.html"; // Update to your main page URL
+            window.location.href = `https://streamstats.github.io/Twitch/redirect.html?redirect_uri=${encodeURIComponent(redirectUrl)}`;
         }
     </script>
 </body>
