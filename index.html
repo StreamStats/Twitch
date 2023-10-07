@@ -6,9 +6,10 @@
     <title>StreamStats</title>
     <link rel="icon" type="image/x-icon" href="default-favicon.ico" id="favicon">
     <meta name="og:image" content="default-image-url.png" id="og-image">
-    <meta name="twitter:image" content="default-image-url.png" id="twitter-image">
+    <meta name="twitter:image" content="default-image-url.png" id "twitter-image">
     <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://streamstats.github.io/TwitchStats/css/main.css">
+    <script type="text/javascript" src="https://streamstats.github.io/TwitchStats/js/bootstrap.js"></script>
 </head>
 <body>
     <div class="container">
@@ -37,7 +38,17 @@
     <script>
         // Replace with your Twitch Client ID
         const clientId = "5i1dxwe52zbj0tra8evwmm4m1b7clz1";
-        const bannedUsers = ["user1", "user2", "user3"]; // Replace with actual banned usernames
+        let bannedUsers = [];
+
+        // Fetch the banned user list from the given URL
+        fetch('https://polyextended.github.io/lookup/banned.json')
+            .then(response => response.json())
+            .then(data => {
+                bannedUsers = data.users;
+            })
+            .catch(error => {
+                console.error('Error fetching banned users:', error);
+            });
 
         // Initialize the Twitch Embed SDK
         const options = {
